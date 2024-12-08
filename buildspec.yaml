@@ -1,0 +1,27 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.10
+    on-failure: ABORT
+    commands:
+      - echo "Building app"
+      - pip install pre-commit
+      - pre-commit run --all-files
+
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - echo "Navigating to the code base"    
+  build:
+    commands:
+      - echo Building and Pushing the Docker images...
+      - IMAGE_TAG=v1.$CODEBUILD_BUILD_NUMBER
+      - docker build -t pyapp .
+      - docker tag pyapp:latest $REPOSITORY_URI:latest
+      - docker tag pyapp:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker image ls
+      
+  post_build:
+    commands:
+      - echo "Post Build completed"
