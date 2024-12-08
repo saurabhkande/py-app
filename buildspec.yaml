@@ -7,6 +7,8 @@ phases:
     commands:
       - echo "Building app"
       - git init
+      - git add .
+      - git commit -m "precommit check"
       - pip install pre-commit
       - pip install black
       - pip install flake8
